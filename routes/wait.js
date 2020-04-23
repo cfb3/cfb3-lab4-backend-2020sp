@@ -18,3 +18,6 @@ router.get("/", (request, response) => {
         });
     }, 5000)
 })
+
+// "return" the router
+module.exports = router
