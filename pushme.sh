@@ -5,6 +5,5 @@ then
 fi
 echo $MSG
 git add .
-git commit -m "commit from script: ${MSG}"
+git commit -m "pushme: ${MSG}"
 git push -u origin master
-
