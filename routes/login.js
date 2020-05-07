@@ -69,13 +69,13 @@ router.get('/', (request, response) => {
                     //credentials match. get a new JWT
                     let token = jwt.sign(
                         {
-                             "email": email,
-                             memberid: result.rows[0].memberid
-                         },
-                         config.secret,
-                         { 
-                             expiresIn: '14 days' // expires in 14 days
-                         }
+                            "email": email,
+                            memberid: result.rows[0].memberid
+                        },
+                        config.secret,
+                        { 
+                            expiresIn: '14 days' // expires in 14 days
+                        }
                      )
      
                     //package and send the results
