@@ -2,7 +2,7 @@
 let pool = require('./sql_conn.js')
 
 //We use this create the SHA256 hash
-const crypto = require("crypto");
+const crypto = require("crypto")
 
 function sendEmail(from, receiver, subj, message) {
   //research nodemailer for sending email from node.
@@ -13,7 +13,7 @@ function sendEmail(from, receiver, subj, message) {
   //similar to the DATABASE_URL and PHISH_DOT_NET_KEY (later section of the lab)
 
   //fake sending an email for now. Post a message to logs. 
-  console.log('Email sent: ' + message);
+  console.log('Email sent: ' + message)
 }
 
 /**
@@ -23,11 +23,11 @@ function sendEmail(from, receiver, subj, message) {
  * @param {string} salt the salt to use when hashing
  */
 function getHash(pw, salt) {
-    return crypto.createHash("sha256").update(pw + salt).digest("hex");
+    return crypto.createHash("sha256").update(pw + salt).digest("hex")
 }
 
-
+let messaging = require('./pushy_utilities.js')
 
 module.exports = { 
-    pool, getHash, sendEmail
+    pool, getHash, sendEmail, messaging
 }
