@@ -55,7 +55,7 @@ router.post("/", (request, response, next) => {
     }
 }, (request, response, next) => {
     //validate chat id exists
-    let query = 'SELECT * FROM CHATS WHERE ChatId=$1'
+    let query = 'SELECT name FROM CHATS WHERE ChatId=$1'
     let values = [request.body.chatId]
 
     pool.query(query, values)
@@ -65,6 +65,8 @@ router.post("/", (request, response, next) => {
                     message: "Chat ID not found"
                 })
             } else {
+                response.chat = {}
+                response.chat.name = result.rows[0].name
                 next()
             }
         }).catch(error => {
@@ -98,14 +100,16 @@ router.post("/", (request, response, next) => {
     //add the message to the database
     let insert = `INSERT INTO Messages(ChatId, Message, MemberId)
                   VALUES($1, $2, $3) 
-                  RETURNING PrimaryKey AS MessageId, ChatId, Message, MemberId AS email, TimeStamp`
+                  RETURNING PrimaryKey AS MessageId, Message, TimeStamp`
     let values = [request.body.chatId, request.body.message, request.decoded.memberid]
     pool.query(insert, values)
         .then(result => {
             if (result.rowCount == 1) {
                 //insertion success. Attach the message to the Response obj
-                response.message = result.rows[0]
-                response.message.email = request.decoded.email
+                response.chat.message = result.rows[0]
+                response.chat.message.email = request.decoded.email
+                response.chat.memberid = request.decoded.memberid
+                response.chat.chatid = request.body.chatId
                 //Pass on to next to push
                 next()
             } else {
@@ -129,12 +133,10 @@ router.post("/", (request, response, next) => {
         let values = [request.body.chatId]
         pool.query(query, values)
             .then(result => {
-                console.log(request.decoded.email)
-                console.log(request.body.message)
                 result.rows.forEach(entry => 
                     msg_functions.sendMessageToIndividual(
                         entry.token, 
-                        response.message))
+                        response.chat))
                 response.send({
                     success:true
                 })

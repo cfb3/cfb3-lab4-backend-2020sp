@@ -41,13 +41,13 @@ VALUES
 INSERT INTO
     chats(chatid, name)
 VALUES
-    (1, 'Global Chat')
+    (2, 'Global Chat 2')
 RETURNING *;
 
 --Add the three test users to Global Chat
 INSERT INTO 
     ChatMembers(ChatId, MemberId)
-SELECT 1, Members.MemberId
+SELECT 2, Members.MemberId
 FROM Members
 WHERE Members.Email='test1@test.com'
     OR Members.Email='test2@test.com'
