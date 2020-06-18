@@ -1292,6 +1292,30 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/marvel/characters",
+    "title": "Request a list of marvel characters",
+    "name": "GetMarvelCharacters",
+    "group": "Marvel",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>JWT provided from Auth get</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>This end point is a pass through to the marvel.com api/</p>",
+    "version": "0.0.0",
+    "filename": "routes/marvel.js",
+    "groupTitle": "Marvel"
+  },
+  {
+    "type": "get",
     "url": "/messages/:chatId?/:messageId?",
     "title": "Request to get chat messages",
     "name": "GetMessages",
