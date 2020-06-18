@@ -3,13 +3,24 @@ const express = require('express')
 //Create a new instance of express
 const app = express()
 
-let middleware = require('./utilities/middleware')
+let middleware = require('./middleware')
 
 const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests, that are encoded in JSON
 app.use(bodyParser.json())
 
-app.use('/hello', middleware.rateLimiterMiddleware, require('./routes/hello.js'))
+/*
+ * This middleware function will respond to inproperly formed JSON in 
+ * request parameters.
+ */
+app.use(function(err, req, res, next) {
+
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    res.status(400).send({ message: "malformed JSON in parameters" });
+  } else next();
+})
+
+app.use('/hello', middleware.rateLimiter, require('./routes/hello.js'))
 
 app.use('/params', require('./routes/params.js'))
 
@@ -23,23 +34,16 @@ app.use('/auth', require('./routes/login.js'))
 
 app.use('/phish', middleware.checkToken, require('./routes/phish.js'))
 
+app.use('/marvel', require('./routes/marvel.js'))
+
 app.use('/messages', middleware.checkToken, require('./routes/messages.js'))
 
-app.use('/chats', middleware.checkToken, require('./routes/chats.js'))
+app.use('/chats', middleware.rateLimiter, middleware.checkToken, require('./routes/chats.js'))
 
 app.use('/auth', middleware.checkToken, require('./routes/pushyregister.js'))
 
 
-/*
- * This middleware function will respond to inproperly formed JSON in 
- * request parameters.
- */
-app.use(function(err, req, res, next) {
 
-  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
-    res.status(400).send({ message: "malformed JSON in parameters" });
-  } else next();
-})
 
 /*
  * Return HTML for the / end point. 

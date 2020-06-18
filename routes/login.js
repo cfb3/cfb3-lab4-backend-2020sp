@@ -2,9 +2,9 @@
 const express = require('express')
 
 //Access the connection to Heroku Database
-let pool = require('../utilities/utils').pool
+let pool = require('../utilities').pool
 
-let getHash = require('../utilities/utils').getHash
+let getHash = require('../utilities').getHash
 
 var router = express.Router()
 
@@ -18,12 +18,13 @@ let config = {
     secret: process.env.JSON_WEB_TOKEN
 }
 
+
 const {RateLimiterRedis} = require('rate-limiter-flexible')
 
 const redisClient = require('redis').createClient(process.env.REDIS_URL)
 
 const maxWrongAttemptsByIPperDay = 100
-const maxConsecutiveFailsByUsernameAndIP = 5
+const maxConsecutiveFailsByUsernameAndIP = 3
 
 const limiterSlowBruteByIP = new RateLimiterRedis({
   storeClient: redisClient,
