@@ -30,7 +30,7 @@ router.get("/characters", (request, response) => {
 
     let hash = crypto.createHash('md5').update(time_stamp + private_key + public_key).digest("hex")
     
-    let params = `?ts=${time_stamp}&apikey=${public_key}&hash=${hash}`
+    let params = `?ts=${time_stamp}&apikey=${public_key}&hash=${hash}&offset=1453`
 
     const options = {
         hostname: 'gateway.marvel.com',
